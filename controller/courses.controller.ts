@@ -2,7 +2,8 @@ import { Response, Request } from "express";
 import { createCourse, getCourses } from "../services/test.service";
 
 export const createCoursesController = async (request : Request , response : Response) => {
-    const { course }  = request.body
+    const course   = request.body
+    console.log(course)
     await createCourse(course)
     response.send("success")
 }
@@ -11,3 +12,7 @@ export const getCoursesController = async (request : Request , response : Respon
     const courses = await getCourses()
     response.send(courses)
 }
+
+
+
+
