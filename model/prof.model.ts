@@ -1,10 +1,11 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 
-const SectionsSchema = new Schema({
-    course : { type: String, required: true },
-    level : { type: String, required: true },
-    sem : { type: String, required: true },
+const profSchema = new Schema({
+    name : { type: String, required: true },
+    email : { type: String, required: true },
+    password : { type: String, required: true },
+    contact : { type: String, required: true },
     subjects : [{
         name : { type: String, required: true },
         code : { type: String, required: true },
@@ -21,10 +22,7 @@ const SectionsSchema = new Schema({
             studentName : { type: String, required: true },
         }]
     }],
-    students : [{
-        studentId : { type: String, required: true },
-        studentName : { type: String, required: true },
-    }]
 });
 
-export default mongoose.model('Sections', SectionsSchema)
+export default mongoose.model('Prof', profSchema)
+
