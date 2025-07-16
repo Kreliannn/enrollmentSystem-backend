@@ -14,7 +14,10 @@ export interface sectionSubjects  {
     end : string,
     section : string,
     room : string
-    instructor : string,
+    instructor : {
+        instructor_id : string,
+        name : string
+    },
     students : enrolledInterface[]
 }
 
@@ -22,6 +25,7 @@ export interface sectionInterface{
     course : string,
     level : string,
     sem : string,
+    section : string,
     subjects : sectionSubjects[],
     students : enrolledInterface[]
 }
