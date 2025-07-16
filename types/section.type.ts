@@ -1,5 +1,3 @@
-
-
 export interface sectionSubjects  {
     name : string,
     code : string,
@@ -20,9 +18,10 @@ export interface enrolledInterface {
 
 export interface sectionInterface{
     course : string,
-    code : string,
+    level : string,
+    sem : string,
     subjects : sectionSubjects[],
-    student : enrolledInterface[]
+    students : enrolledInterface[]
 }
 
 
