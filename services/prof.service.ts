@@ -24,8 +24,8 @@ export const getProfById = async (id : string) => {
         { $match: { "subjects._id": { $in: scheduleIds } } },
         {
             $project: {
-            sectionId: "$_id",
-            subject: "$subjects",
+                sectionId: "$_id",
+                subject: "$subjects",
             }
         }
     ]);
