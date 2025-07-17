@@ -1,9 +1,31 @@
 import { Response, Request } from "express";
 import { getStudents, createStudent, getStudentById } from "../services/student.service";
+import { studentInterface } from "../types/student.type";
 
 export const createStudentController = async (request : Request , response : Response) => {
-    const student  = request.body
-    await createStudent(student)
+    
+    interface dataType {
+        name : string,
+        level : string,
+        sem : string,
+        course : string,
+        gender : string,
+        passed : string[]
+    }
+
+    const body : dataType  = request.body
+
+    const newAccount : studentInterface = {
+        ...body,
+        studentId : "2025-54276",
+        subjects : [],
+        section : "none",
+        addedSubjects : [],
+        failed : []
+    }
+
+    await createStudent(newAccount)
+   
     response.send("success")
 }
 
