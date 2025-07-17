@@ -1,3 +1,5 @@
+import { getProfInterface } from "./prof.type"
+
 export interface enrolledInterface {
     studentId : string,
     studentName : string
@@ -14,10 +16,7 @@ export interface sectionSubjects  {
     end : string,
     section : string,
     room : string
-    instructor : {
-        instructor_id : string,
-        name : string
-    },
+    instructor : getProfInterface,
     students : enrolledInterface[]
 }
 

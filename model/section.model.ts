@@ -6,7 +6,7 @@ const SectionsSchema = new Schema({
     level : { type: String, required: true },
     sem : { type: String, required: true },
     section : { type: String, required: true },
-    subjects : [{
+    subjects : [{ 
         name : { type: String, required: true },
         code : { type: String, required: true },
         units : { type: Number, required: true },
@@ -16,10 +16,7 @@ const SectionsSchema = new Schema({
         end : { type: String, required: true },
         section : { type: String, required: true },
         room : { type: String, required: true },
-        instructor: {
-            instructor_id: { type: String, required: true },
-            name: { type: String, required: true }
-        },
+        instructor: { type: Schema.Types.ObjectId, ref: 'Prof', required: true },
         students : [{
             studentId : { type: String, required: true },
             studentName : { type: String, required: true },

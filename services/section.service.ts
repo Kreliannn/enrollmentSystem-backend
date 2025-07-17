@@ -6,5 +6,5 @@ export const createSection = async ( section : sectionInterface) => {
 }
 
 export const getSection = async () => {
-    return await Section.find()
+    return await Section.find().populate("subjects.instructor")
 }

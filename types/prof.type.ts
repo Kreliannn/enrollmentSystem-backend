@@ -9,5 +9,7 @@ export interface profInterface {
 }
 
 
-
+export interface getProfInterface extends profInterface {
+    _id : string
+}
 
