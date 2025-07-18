@@ -7,7 +7,6 @@ export interface sectionSubjects  {
     name : string,
     code : string,
     units : number,
-    type : string,
     days : string,
     start : string,
     end : string,

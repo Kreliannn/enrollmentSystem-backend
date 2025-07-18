@@ -14,7 +14,6 @@ const coursesSchema = new Schema({
             prerequisite : { type: String, required: true },
             code : { type: String, required: true },
             units : { type: Number, required: true },
-            type : { type: String, required: true },
         }]
     }],
 });

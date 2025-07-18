@@ -41,3 +41,4 @@ export const getProfById = async (id: string) => {
 export const addSubjectToSched = async (id : string, sectionId : string) => {
     await Prof.findByIdAndUpdate(id, {$push: { schedules: sectionId }})
 }
+

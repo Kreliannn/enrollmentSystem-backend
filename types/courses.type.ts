@@ -2,7 +2,6 @@ export interface subjectsInterface {
     name : string,
     code : string,
     units : number,
-    type : string,
     prerequisite : string,
     course : string,
 }

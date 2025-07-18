@@ -4,7 +4,8 @@ import { getProf, createProf , getProfById, findProf} from "../services/prof.ser
 export const createProfController = async (request : Request , response : Response) => {
     const prof   = request.body
     await createProf(prof)
-    response.send("success")
+    const profs = await getProf()
+    response.send(profs)
 }
 
 export const authProfController = async (request : Request , response : Response) => {
