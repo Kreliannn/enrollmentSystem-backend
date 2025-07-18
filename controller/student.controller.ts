@@ -35,6 +35,6 @@ export const getStudentController = async (request : Request , response : Respon
 
 export const getStudentByIdController = async (request : Request , response : Response) => {
     const { id } = request.params
-    const STDUENT = await getStudentById(id)
-    response.send(STDUENT)
+    const student = await getStudentById(id)
+    response.send(student)
 }

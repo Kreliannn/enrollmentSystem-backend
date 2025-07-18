@@ -10,6 +10,7 @@ const SectionsSchema = new Schema({
         name : { type: String, required: true },
         code : { type: String, required: true },
         units : { type: Number, required: true },
+        course : { type: String, required: true },
         prerequisite : { type: String, required: true },
         type : { type: String, required: true },
         days : { type: String, required: true },
@@ -18,15 +19,9 @@ const SectionsSchema = new Schema({
         section : { type: String, required: true },
         room : { type: String, required: true },
         instructor: { type: Schema.Types.ObjectId, ref: 'Prof', required: true },
-        students : [{
-            studentId : { type: String, required: true },
-            studentName : { type: String, required: true },
-        }]
+        students : { type: Schema.Types.ObjectId, ref: 'Student', required: true },
     }],
-    students : [{
-        studentId : { type: String, required: true },
-        studentName : { type: String, required: true },
-    }]
+    students :  { type: Schema.Types.ObjectId, ref: 'Student', required: true },
 });
 
 export default mongoose.model('Sections', SectionsSchema)

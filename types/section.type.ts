@@ -1,12 +1,9 @@
 import { getProfInterface } from "./prof.type"
-
-export interface enrolledInterface {
-    studentId : string,
-    studentName : string
-}
+import { getStudentInterface } from "./student.type"
 
 
 export interface sectionSubjects  {
+    course : string,
     name : string,
     code : string,
     units : number,
@@ -17,7 +14,7 @@ export interface sectionSubjects  {
     section : string,
     room : string
     instructor : getProfInterface,
-    students : enrolledInterface[]
+    students : getStudentInterface[]
 }
 
 export interface sectionInterface{
@@ -26,7 +23,7 @@ export interface sectionInterface{
     sem : string,
     section : string,
     subjects : sectionSubjects[],
-    students : enrolledInterface[]
+    students : getStudentInterface[]
 }
 
 
