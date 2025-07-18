@@ -9,6 +9,7 @@ const coursesSchema = new Schema({
         sem : { type: String, required: true },
         subjects : [{
             name : { type: String, required: true },
+            prerequisite : { type: String, required: true },
             code : { type: String, required: true },
             units : { type: Number, required: true },
             type : { type: String, required: true },

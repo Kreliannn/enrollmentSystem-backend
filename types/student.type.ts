@@ -9,16 +9,24 @@ export interface studentInterface {
     gender : string,
     sem : string,
     section : string,
-    subjects : sectionSubjects[],
-    addedSubjects : sectionSubjects[],
+    subjects : string[],
     passed : string[],
     failed : string[]
 }
 
-export interface getStudentInterface extends studentInterface {
-    _id : string
+export interface getStudentInterface {
+    _id : string,
+    name : string,
+    studentId : string,
+    course : string,
+    level : string,
+    gender : string,
+    sem : string,
+    section : string,
+    subjects : sectionSubjects[],
+    passed : string[],
+    failed : string[]
 }
-
 
 
 

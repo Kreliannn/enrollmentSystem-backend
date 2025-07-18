@@ -1,9 +1,9 @@
 import { Response, Request } from "express";
-import { getStudents, createStudent, getStudentById } from "../services/student.service";
+import { getStudents, createStudent, getStudentById, generateStudentId } from "../services/student.service";
 import { studentInterface } from "../types/student.type";
 
 export const createStudentController = async (request : Request , response : Response) => {
-    
+
     interface dataType {
         name : string,
         level : string,
@@ -17,10 +17,9 @@ export const createStudentController = async (request : Request , response : Res
 
     const newAccount : studentInterface = {
         ...body,
-        studentId : "2025-54276",
+        studentId : await generateStudentId(),
         subjects : [],
         section : "none",
-        addedSubjects : [],
         failed : []
     }
 
@@ -34,8 +33,8 @@ export const getStudentController = async (request : Request , response : Respon
     response.send(students)
 }
 
-export const getProfByIdController = async (request : Request , response : Response) => {
+export const getStudentByIdController = async (request : Request , response : Response) => {
     const { id } = request.params
-    const student = await getStudentById(id)
-    response.send(student)
+    const STDUENT = await getStudentById(id)
+    response.send(STDUENT)
 }

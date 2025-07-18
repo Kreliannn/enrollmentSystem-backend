@@ -10,6 +10,7 @@ const SectionsSchema = new Schema({
         name : { type: String, required: true },
         code : { type: String, required: true },
         units : { type: Number, required: true },
+        prerequisite : { type: String, required: true },
         type : { type: String, required: true },
         days : { type: String, required: true },
         start : { type: String, required: true },
