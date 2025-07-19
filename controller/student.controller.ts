@@ -61,8 +61,16 @@ export const enrollStudentController = async (request : Request , response : Res
     await addStudentToSection(student._id.toString(), sectionId)
     await updateStudentSection(student._id.toString(), section.section)
 
-   response.send("success")
+    await updateStudentSection(student._id.toString(), section.section)
+
+    const updatedStudent = await getStudentById(studentId)
+
+
+    response.send(updatedStudent)
 }
+
+
+
 
 
 export const authStudentController = async (request : Request , response : Response) => {

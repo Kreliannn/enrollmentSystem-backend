@@ -6,6 +6,7 @@ const route = Router()
 
 route.post("/student", createStudentController)
 route.post("/student/enroll", enrollStudentController)
+//route.post("/student/onlineEnroll", enrollStudentController)
 route.post("/student/auth", authStudentController)
 route.get("/student", getStudentController)
 route.post("/student/studentId", getStudentByIdController)
