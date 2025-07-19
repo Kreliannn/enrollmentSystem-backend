@@ -12,7 +12,7 @@ export const getStudents = async () => {
 }
 
 export const getStudentById = async (id: string) => {
-  const student = await Student.findById(id).lean();
+  const student = await Student.findOne({studentId : id}).lean();
   if (!student) return;
 
   const subjectIds = student.subjects.map(id => new mongoose.Types.ObjectId(id));
@@ -41,3 +41,13 @@ export const generateStudentId = async () => {
     const studentId = lastNumber + 1
     return `2025-${studentId.toString()}`
 }
+
+
+export const addSubjectToStudent = async (id : string, sectionId : string) => {
+    await Student.findByIdAndUpdate(id, {$push: { subjects : sectionId }})
+}
+
+export const updateStudentSection = async (id : string, section : string) => {
+    await Student.findByIdAndUpdate(id, {section : section})
+}
+

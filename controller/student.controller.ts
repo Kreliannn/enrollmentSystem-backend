@@ -1,6 +1,9 @@
 import { Response, Request } from "express";
-import { getStudents, createStudent, getStudentById, generateStudentId } from "../services/student.service";
+import { getStudents, createStudent, getStudentById, generateStudentId , addSubjectToStudent, updateStudentSection} from "../services/student.service";
 import { studentInterface } from "../types/student.type";
+import { getSectionById, addStudentToSection } from "../services/section.service";
+import { getSectionInterface } from "../types/section.type";
+
 
 export const createStudentController = async (request : Request , response : Response) => {
 
@@ -34,7 +37,28 @@ export const getStudentController = async (request : Request , response : Respon
 }
 
 export const getStudentByIdController = async (request : Request , response : Response) => {
-    const { id } = request.params
+    const { id } = request.body
     const student = await getStudentById(id)
     response.send(student)
+}
+
+export const enrollStudentController = async (request : Request , response : Response) => {
+    const { studentId , sectionId } = request.body
+    
+    const student = await getStudentById(studentId)
+    const section  = await getSectionById(sectionId)
+
+    if(!student || !section){
+        response.status(500).send("error")
+        return
+    }
+
+    section.subjects.forEach(async (sub) => {
+       await addSubjectToStudent(student._id.toString(), sub._id.toString())
+    })
+    
+    await addStudentToSection(student._id.toString(), sectionId)
+    await updateStudentSection(student._id.toString(), section.section)
+
+   response.send("success")
 }
