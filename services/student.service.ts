@@ -12,7 +12,7 @@ export const getStudents = async () => {
 }
 
 export const getStudentById = async (id: string) => {
-  const student = await Student.findOne({studentId : id}).lean();
+  const student = await Student.findOne({ studentId: id }).lean();
   if (!student) return;
 
   const subjectIds = student.subjects.map(id => new mongoose.Types.ObjectId(id));
@@ -21,18 +21,34 @@ export const getStudentById = async (id: string) => {
     { $unwind: "$subjects" },
     { $match: { "subjects._id": { $in: subjectIds } } },
     {
-      $project: {
-        sectionId: "$_id",
-        subject: "$subjects"
+      $lookup: {
+        from: "profs", // collection name of Prof
+        localField: "subjects.instructor",
+        foreignField: "_id",
+        as: "instructor"
+      }
+    },
+    { $unwind: "$instructor" },
+    {
+      $addFields: {
+        "subjects.instructor": "$instructor"
+      }
+    },
+    {
+      $replaceRoot: {
+        newRoot: {
+          $mergeObjects: [ "$subjects", { sectionId: "$_id" } ]
+        }
       }
     }
   ]);
 
   return {
     ...student,
-    subjects : subjects
+    subjects
   };
 };
+
 
 export const generateStudentId = async () => {
     const students = await getStudents()
@@ -49,5 +65,12 @@ export const addSubjectToStudent = async (id : string, sectionId : string) => {
 
 export const updateStudentSection = async (id : string, section : string) => {
     await Student.findByIdAndUpdate(id, {section : section})
+}
+
+
+export const findStudent = async (studentId : string , password : string) => {
+    const student = await Student.findOne({studentId, password})
+    if(!student) return null
+    return await getStudentById(student.studentId)
 }
 

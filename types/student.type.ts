@@ -4,6 +4,7 @@ import { sectionSubjects } from "./section.type"
 export interface studentInterface {
     name : string,
     studentId : string,
+    password : string,
     course : string,
     level : string,
     gender : string,
@@ -18,6 +19,7 @@ export interface getStudentInterface {
     _id : string,
     name : string,
     studentId : string,
+    password : string,
     course : string,
     level : string,
     gender : string,

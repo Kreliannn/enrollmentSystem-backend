@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { getStudents, createStudent, getStudentById, generateStudentId , addSubjectToStudent, updateStudentSection} from "../services/student.service";
+import { getStudents, createStudent, getStudentById, generateStudentId , addSubjectToStudent, updateStudentSection, findStudent} from "../services/student.service";
 import { studentInterface } from "../types/student.type";
 import { getSectionById, addStudentToSection } from "../services/section.service";
 import { getSectionInterface } from "../types/section.type";
@@ -11,6 +11,7 @@ export const createStudentController = async (request : Request , response : Res
         name : string,
         level : string,
         sem : string,
+        password : string,
         course : string,
         gender : string,
         passed : string[]
@@ -61,4 +62,11 @@ export const enrollStudentController = async (request : Request , response : Res
     await updateStudentSection(student._id.toString(), section.section)
 
    response.send("success")
+}
+
+
+export const authStudentController = async (request : Request , response : Response) => {
+    const {studentId, password}   = request.body
+    const student = await findStudent(studentId, password)
+    response.send(student)
 }
