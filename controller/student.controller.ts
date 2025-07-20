@@ -3,7 +3,8 @@ import { getStudents ,createStudent, getStudentById, generateStudentId , addSubj
 import { studentInterface } from "../types/student.type";
 import { getSectionById, addStudentToSection, getSpecificSubject } from "../services/section.service";
 import { getSectionInterface } from "../types/section.type";
-
+import { generateQueueNumber, CreateQueue } from "../services/queue.service";
+import { queueInterface } from "../types/queue.type";
 
 export const createStudentController = async (request : Request , response : Response) => {
 
@@ -110,8 +111,25 @@ export const authStudentController = async (request : Request , response : Respo
 export const clearStudentByIdController = async (request : Request , response : Response) => {
     const { id } = request.body
     await clearStudent(id)
-    const student = await getStudentById(id)
+    const student = await getStudentById(id) 
     response.send(student)
+}
+
+
+export const getStudentQueueByIdController = async (request : Request , response : Response) => {
+    const { id } = request.body
+    const queueNumber = await generateQueueNumber() 
+    const date = new Date();
+    const today = date.toISOString().split('T')[0];
+    const newQueue = {
+        student : id,
+        number : queueNumber as number,
+        date : today
+    }
+    
+    const queue = await CreateQueue(newQueue)
+
+    response.send(queue)
 }
 
 
