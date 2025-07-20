@@ -1,7 +1,7 @@
 import { Response, Request } from "express";
-import { getStudents, createStudent, getStudentById, generateStudentId , addSubjectToStudent, updateStudentSection, findStudent, clearStudent, updateStudentStatus} from "../services/student.service";
+import { getStudents ,createStudent, getStudentById, generateStudentId , addSubjectToStudent, updateStudentSection, findStudent, clearStudent, updateStudentStatus} from "../services/student.service";
 import { studentInterface } from "../types/student.type";
-import { getSectionById, addStudentToSection } from "../services/section.service";
+import { getSectionById, addStudentToSection, getSpecificSubject } from "../services/section.service";
 import { getSectionInterface } from "../types/section.type";
 
 
@@ -56,7 +56,11 @@ export const enrollStudentController = async (request : Request , response : Res
     }
 
     section.subjects.forEach(async (sub) => {
-       await addSubjectToStudent(student._id.toString(), sub._id.toString())
+        if(!student.passed.includes(sub.code))
+        {
+            if(sub.prerequisite == "none") return await addSubjectToStudent(student._id.toString(), sub._id.toString())        
+            if(student.passed.includes(sub.prerequisite)) return await addSubjectToStudent(student._id.toString(), sub._id.toString())
+        }
     })
     
     await addStudentToSection(student._id.toString(), sectionId)
@@ -71,6 +75,28 @@ export const enrollStudentController = async (request : Request , response : Res
 }
 
 
+export const enrollIrregStudentController = async (request : Request , response : Response) => {
+    const { studentId , subjects } = request.body
+    
+    const student = await getStudentById(studentId)
+    
+
+    if(!student){
+        response.status(500).send("error")
+        return
+    }
+
+    subjects.forEach(async (sub : any) => {
+        await addSubjectToStudent(student._id.toString(), sub._id.toString()) 
+    })
+
+    
+    await updateStudentStatus(student._id.toString(), "For Printing")
+
+    const updatedStudent = await getStudentById(studentId)
+
+    response.send(updatedStudent)
+}
 
 
 
@@ -87,3 +113,5 @@ export const clearStudentByIdController = async (request : Request , response : 
     const student = await getStudentById(id)
     response.send(student)
 }
+
+

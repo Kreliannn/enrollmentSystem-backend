@@ -1,6 +1,6 @@
 import { Response, Request } from "express";
-import { createSection, getSection } from "../services/section.service";
-import { sectionInterface } from "../types/section.type";
+import { createSection, getSection , getSectionByCourse} from "../services/section.service";
+import { sectionInterface, sectionSubjects } from "../types/section.type";
 import { addSubjectToSched } from "../services/prof.service";
 
 export const createSectionController = async (request : Request , response : Response) => {
@@ -21,6 +21,11 @@ export const getSectionController = async (request : Request , response : Respon
 }
 
 
+export const getAllSubByCourse = async (request : Request , response : Response) => {
+    const {course} = request.params
+    const  sections = await getSectionByCourse(course)
+    response.send(sections)
+}
 
 
 
