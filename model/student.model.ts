@@ -6,6 +6,7 @@ const StudentSchema = new Schema({
     studentId : { type: String, required: true },
     password : { type: String, required: true },
     course : { type: String, required: true },
+    status : { type: String, required: true },
     level : { type: String, required: true },
     gender : { type: String, required: true },
     sem : { type: String, required: true },

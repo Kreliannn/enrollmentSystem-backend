@@ -64,13 +64,27 @@ export const addSubjectToStudent = async (id : string, sectionId : string) => {
 }
 
 export const updateStudentSection = async (id : string, section : string) => {
-    await Student.findByIdAndUpdate(id, {section : section})
+    await Student.findByIdAndUpdate(id, {section})
 }
+
+export const updateStudentStatus= async (id : string, status : string) => {
+    await Student.findByIdAndUpdate(id, {status})
+}
+
 
 
 export const findStudent = async (studentId : string , password : string) => {
     const student = await Student.findOne({studentId, password})
     if(!student) return null
     return await getStudentById(student.studentId)
+}
+
+export const clearStudent = async (studentId : string ) => {
+    const student = await Student.findOne({studentId})
+    if(!student) return null
+    student.section = "none"
+    student.status = "unEnrolled"
+    student.subjects = []
+    await student.save()
 }
 

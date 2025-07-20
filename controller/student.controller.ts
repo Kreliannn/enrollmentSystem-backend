@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { getStudents, createStudent, getStudentById, generateStudentId , addSubjectToStudent, updateStudentSection, findStudent} from "../services/student.service";
+import { getStudents, createStudent, getStudentById, generateStudentId , addSubjectToStudent, updateStudentSection, findStudent, clearStudent, updateStudentStatus} from "../services/student.service";
 import { studentInterface } from "../types/student.type";
 import { getSectionById, addStudentToSection } from "../services/section.service";
 import { getSectionInterface } from "../types/section.type";
@@ -21,8 +21,9 @@ export const createStudentController = async (request : Request , response : Res
 
     const newAccount : studentInterface = {
         ...body,
+        status : "unEnrolled",
         studentId : await generateStudentId(),
-        subjects : [],
+        subjects : [],  
         section : "none",
         failed : []
     }
@@ -59,12 +60,12 @@ export const enrollStudentController = async (request : Request , response : Res
     })
     
     await addStudentToSection(student._id.toString(), sectionId)
-    await updateStudentSection(student._id.toString(), section.section)
+
+    await updateStudentStatus(student._id.toString(), "For Printing")
 
     await updateStudentSection(student._id.toString(), section.section)
 
     const updatedStudent = await getStudentById(studentId)
-
 
     response.send(updatedStudent)
 }
@@ -76,5 +77,13 @@ export const enrollStudentController = async (request : Request , response : Res
 export const authStudentController = async (request : Request , response : Response) => {
     const {studentId, password}   = request.body
     const student = await findStudent(studentId, password)
+    response.send(student)
+}
+
+
+export const clearStudentByIdController = async (request : Request , response : Response) => {
+    const { id } = request.body
+    await clearStudent(id)
+    const student = await getStudentById(id)
     response.send(student)
 }
