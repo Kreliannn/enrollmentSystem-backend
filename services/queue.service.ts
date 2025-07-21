@@ -36,4 +36,7 @@ export const removeQueue = async (id : string) => {
     await Queue.findByIdAndDelete(id)
 }
 
+export const clearQueue = async () => {
+    await Queue.deleteMany({})
+}
 

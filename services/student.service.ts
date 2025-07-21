@@ -71,6 +71,14 @@ export const updateStudentStatus= async (id : string, status : string) => {
     await Student.findByIdAndUpdate(id, {status})
 }
 
+export const updateStudentBalance= async (id : string, payment : number) => {
+  const student =  await Student.findById(id)
+  if(!student) return
+  student.balance = student.balance - payment
+  await student.save()
+  return student
+}
+
 
 
 export const findStudent = async (studentId : string , password : string) => {

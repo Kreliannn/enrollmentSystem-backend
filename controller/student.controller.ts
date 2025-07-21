@@ -1,11 +1,12 @@
 import { Response, Request } from "express";
-import { getStudents ,createStudent, getStudentById, generateStudentId , addSubjectToStudent, updateStudentSection, findStudent, clearStudent, updateStudentStatus} from "../services/student.service";
+import {  updateStudentBalance ,getStudents ,createStudent, getStudentById, generateStudentId , addSubjectToStudent, updateStudentSection, findStudent, clearStudent, updateStudentStatus} from "../services/student.service";
 import { studentInterface } from "../types/student.type";
 import { getSectionById, addStudentToSection, getSpecificSubject } from "../services/section.service";
 import { getSectionInterface } from "../types/section.type";
-import { generateQueueNumber, CreateQueue } from "../services/queue.service";
+import { generateQueueNumber, CreateQueue, getQueue } from "../services/queue.service";
 import { queueInterface } from "../types/queue.type";
 import { getTuition } from "../services/course.service";
+import { createTransaction } from "../services/transaction.service";
 
 export const createStudentController = async (request : Request , response : Response) => {
 
@@ -136,4 +137,34 @@ export const studentForPaymentController = async (request : Request , response :
     response.send(queue)
 }
 
+
+export const studentCreateQueueController = async (request : Request , response : Response) => {
+    const { id } = request.body
+    const queueNumber = await generateQueueNumber() 
+    const date = new Date();
+    const today = date.toISOString().split('T')[0];
+    const newQueue = {
+        student : id,
+        number : queueNumber as number,
+        date : today
+    }
+    await CreateQueue(newQueue)
+    const queue = await getQueue()
+    response.send(queue)
+}
+
+
+export const studentPayBalanceQueueController = async (request : Request , response : Response) => {
+    const { id, payment } = request.body
+    const student = await updateStudentBalance(id, payment)
+    const date = new Date();
+    const today = date.toISOString().split('T')[0];
+    const newTransaction = {
+        student : id,
+        amount : payment,
+        date : today
+    }
+    await createTransaction(newTransaction)
+    response.send(student)
+}
 
