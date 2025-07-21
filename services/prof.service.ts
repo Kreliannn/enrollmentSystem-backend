@@ -18,6 +18,7 @@ export const findProf= async (email : string , password : string) => {
     return await getProfById(prof._id.toString())
 }
 
+/*
 export const getProfById = async (id: string) => {
   const prof = await Prof.findById(id).lean();
   if (!prof) return;
@@ -36,7 +37,46 @@ export const getProfById = async (id: string) => {
     ...prof,
     schedules: subjectsResult // now contains only the subject objects
   };
+}; */
+
+
+export const getProfById = async (id: string) => {
+  const prof = await Prof.findById(id).lean();
+  if (!prof) return;
+
+  const scheduleIds = prof.schedules;
+
+  const subjectsResult = await Sections.aggregate([
+    { $unwind: "$subjects" },
+    { $match: { "subjects._id": { $in: scheduleIds } } },
+
+    // Lookup students for each subject
+    {
+      $lookup: {
+        from: "students", // collection name in lowercase & plural
+        localField: "subjects.students",
+        foreignField: "_id",
+        as: "subjects.studentsData"
+      }
+    },
+
+    // Replace subject.students ObjectIds with full student objects
+    {
+      $addFields: {
+        "subjects.students": "$subjects.studentsData"
+      }
+    },
+
+    { $project: { subjects: 1 } },
+    { $replaceRoot: { newRoot: "$subjects" } }
+  ]);
+
+  return {
+    ...prof,
+    schedules: subjectsResult
+  };
 };
+
 
 export const addSubjectToSched = async (id : string, sectionId : string) => {
     await Prof.findByIdAndUpdate(id, {$push: { schedules: sectionId }})

@@ -1,7 +1,7 @@
 import { Response, Request } from "express";
 import {  updateStudentBalance ,getStudents ,createStudent, getStudentById, generateStudentId , addSubjectToStudent, updateStudentSection, findStudent, clearStudent, updateStudentStatus} from "../services/student.service";
 import { studentInterface } from "../types/student.type";
-import { getSectionById, addStudentToSection, getSpecificSubject } from "../services/section.service";
+import { getSectionById, addStudentToSection, getSpecificSubject , addStudentToSubject} from "../services/section.service";
 import { getSectionInterface } from "../types/section.type";
 import { generateQueueNumber, CreateQueue, getQueue } from "../services/queue.service";
 import { queueInterface } from "../types/queue.type";
@@ -121,6 +121,7 @@ export const clearStudentByIdController = async (request : Request , response : 
 
 export const studentForPaymentController = async (request : Request , response : Response) => {
     const { id } = request.body
+
     const queueNumber = await generateQueueNumber() 
     const date = new Date();
     const today = date.toISOString().split('T')[0];
@@ -130,9 +131,13 @@ export const studentForPaymentController = async (request : Request , response :
         date : today
     }
 
+    const queue = await CreateQueue(newQueue)
+
+    await addStudentToSubject(id)
+
     await updateStudentStatus(id, "enrolled")
     
-    const queue = await CreateQueue(newQueue)
+    
 
     response.send(queue)
 }

@@ -1,4 +1,6 @@
+import e from "express"
 import Section from "../model/section.model"
+import Student from "../model/student.model"
 import { sectionInterface, getSectionInterface } from "../types/section.type"
 import mongoose from "mongoose"
 
@@ -34,3 +36,29 @@ export const getSpecificSubject = async (id : string) => {
 
     return result[0]?.subject
 }
+
+
+export const addStudentToSubject = async (id : string) => {
+
+    const student = await Student.findById(id)
+
+    if(!student) return
+
+    student.subjects.forEach( async (sub) => {
+         const subjectId = new mongoose.Types.ObjectId(sub);
+         await Section.updateOne(
+            { "subjects._id": subjectId }, // find the subject by its ID
+            {
+                $addToSet: { "subjects.$[elem].students": student._id } 
+            },
+            {
+                arrayFilters: [{ "elem._id": subjectId }]
+            }
+        )
+    })
+
+    
+}
+
+
+
