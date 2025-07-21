@@ -10,6 +10,7 @@ const StudentSchema = new Schema({
     level : { type: String, required: true },
     gender : { type: String, required: true },
     sem : { type: String, required: true },
+    balance : { type: Number, required: true },
     section : { type: String, required: true },
     subjects : [{ type: Schema.Types.ObjectId, ref: 'Subject' }],
     passed : [String],

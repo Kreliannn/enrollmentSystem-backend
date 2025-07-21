@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { getQueueController } from "../controller/queue.controller";
-import { getStudentQueueByIdController } from "../controller/student.controller";
+import { getQueueController , voidQueueController, completeQueueController} from "../controller/queue.controller";
+
 
 const route = Router()
 
 route.get("/queue", getQueueController)
-route.post("/queue/test", getStudentQueueByIdController)
+route.post("/queue/complete", completeQueueController)
+route.post("/queue/void", voidQueueController)
 
 export default route

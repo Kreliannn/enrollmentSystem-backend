@@ -13,9 +13,6 @@ export const getQueue = async () => {
 }
 
 
-
-
-
 export const generateQueueNumber = async () => {
     const queue = await Queue.find()
     if(queue.length == 0) return 1
@@ -24,5 +21,19 @@ export const generateQueueNumber = async () => {
 }
 
 
+export const voidQueue = async (id : string) => {
+    const queue = await Queue.findByIdAndDelete(id)
+    if(!queue || !queue.student) return 
+    const newQueue : queueInterface = {
+        number : await generateQueueNumber(),
+        student : queue.student.toString(),
+        date : queue.date
+    }
+    await Queue.create(newQueue)
+}
+
+export const removeQueue = async (id : string) => {
+    await Queue.findByIdAndDelete(id)
+}
 
 

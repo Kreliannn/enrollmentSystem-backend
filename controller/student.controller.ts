@@ -5,6 +5,7 @@ import { getSectionById, addStudentToSection, getSpecificSubject } from "../serv
 import { getSectionInterface } from "../types/section.type";
 import { generateQueueNumber, CreateQueue } from "../services/queue.service";
 import { queueInterface } from "../types/queue.type";
+import { getTuition } from "../services/course.service";
 
 export const createStudentController = async (request : Request , response : Response) => {
 
@@ -22,6 +23,7 @@ export const createStudentController = async (request : Request , response : Res
 
     const newAccount : studentInterface = {
         ...body,
+        balance : await getTuition(body.course, body.level, body.sem),
         status : "unEnrolled",
         studentId : await generateStudentId(),
         subjects : [],  
@@ -116,7 +118,7 @@ export const clearStudentByIdController = async (request : Request , response : 
 }
 
 
-export const getStudentQueueByIdController = async (request : Request , response : Response) => {
+export const studentForPaymentController = async (request : Request , response : Response) => {
     const { id } = request.body
     const queueNumber = await generateQueueNumber() 
     const date = new Date();
@@ -126,6 +128,8 @@ export const getStudentQueueByIdController = async (request : Request , response
         number : queueNumber as number,
         date : today
     }
+
+    await updateStudentStatus(id, "enrolled")
     
     const queue = await CreateQueue(newQueue)
 
