@@ -3,6 +3,7 @@ import Sections from "../model/section.model"
 import { studentInterface } from "../types/student.type"
 import mongoose from "mongoose"
 import { sectionSubjects } from "../types/section.type"
+import { updateGradeLevel } from "../utils/function"
 
 export const createStudent = async ( student : studentInterface) => {
     return await Student.create(student)
@@ -118,3 +119,31 @@ export const getStudentTuition = async (id : string ) => {
     })
     return tuition
 }
+
+
+export const addPassedSub = async (id : string, subjectCode : string ) => {
+  await Student.findByIdAndUpdate(id, { $push: { passed: subjectCode } });
+}
+
+export const clearStudentSub = async ( ) => {
+  await Student.updateMany({}, { $set: { subjects: [] } });
+}
+
+
+
+export const updateStudentLevel = async () => {
+  const allStudents = await Student.find();
+  if (!allStudents) return;
+
+  for (const student of allStudents) {
+    if (student.sem === "1st sem") {
+      student.sem = "2nd sem";
+    } else {
+      student.sem = "1st sem";
+       student.level = updateGradeLevel(student.level);
+    }
+    student.section = "none";
+    student.status = "unEnrolled";
+    await student.save();
+  }
+};

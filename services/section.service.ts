@@ -3,6 +3,7 @@ import Section from "../model/section.model"
 import Student from "../model/student.model"
 import { sectionInterface, getSectionInterface } from "../types/section.type"
 import mongoose from "mongoose"
+import { addPassedSub } from "./student.service"
 
 export const createSection = async ( section : sectionInterface) => {
     return await Section.create(section)
@@ -75,6 +76,32 @@ export const removeStudentToSubject = async (subject_id : string, student_id : s
     );
 }
 
+export const passAllEnrolled = async () => {
+  const allSection = await Section.find();
+  
+  for (const section of allSection) {
+    for (const sub of section.subjects) {
+      const subCode = sub.code;
+      for (const student_id of sub.students) {
+        await addPassedSub(student_id.toString(), subCode);
+      }
+    }
+  }
+};
+
+
+export const clearSectionStudent= async ( ) => {
+    await Section.updateMany({}, { $set: { students: [] } });
+
+    const sections = await Section.find();
+
+    for (const section of sections) {
+    section.subjects.forEach((subj) => {
+        subj.students = []; 
+    });
+    await section.save();
+    }
+}
 
 
 

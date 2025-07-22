@@ -1,7 +1,7 @@
 import { Response, Request } from "express";
-import { setStudentBalance ,getStudentTuition, updateStudentBalance ,getStudents ,createStudent, getStudentById, generateStudentId , addSubjectToStudent, updateStudentSection, findStudent, clearStudent, updateStudentStatus} from "../services/student.service";
+import { updateStudentLevel,  clearStudentSub,setStudentBalance ,getStudentTuition, updateStudentBalance ,getStudents ,createStudent, getStudentById, generateStudentId , addSubjectToStudent, updateStudentSection, findStudent, clearStudent, updateStudentStatus} from "../services/student.service";
 import { studentInterface } from "../types/student.type";
-import { getSectionById, addStudentToSection, getSpecificSubject , addStudentToSubject} from "../services/section.service";
+import { getSectionById, addStudentToSection, getSpecificSubject , addStudentToSubject, passAllEnrolled, clearSectionStudent} from "../services/section.service";
 import { getSectionInterface } from "../types/section.type";
 import { generateQueueNumber, CreateQueue, getQueue } from "../services/queue.service";
 import { queueInterface } from "../types/queue.type";
@@ -174,3 +174,12 @@ export const studentPayBalanceQueueController = async (request : Request , respo
     response.send(student)
 }
 
+
+
+export const proceedToNextSemController = async (request : Request , response : Response) => {
+    await passAllEnrolled() //check balance
+    await clearStudentSub()
+    await clearSectionStudent()
+    await updateStudentLevel() //check balance
+    response.send("success")
+}

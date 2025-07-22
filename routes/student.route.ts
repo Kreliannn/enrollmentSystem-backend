@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {studentPayBalanceQueueController ,getStudentController, studentCreateQueueController ,studentForPaymentController ,enrollIrregStudentController ,createStudentController, getStudentByIdController , enrollStudentController, authStudentController, clearStudentByIdController} from "../controller/student.controller";
+import { proceedToNextSemController  ,studentPayBalanceQueueController ,getStudentController, studentCreateQueueController ,studentForPaymentController ,enrollIrregStudentController ,createStudentController, getStudentByIdController , enrollStudentController, authStudentController, clearStudentByIdController} from "../controller/student.controller";
 
 
 const route = Router()
@@ -14,6 +14,7 @@ route.post("/student/requestQueue", studentCreateQueueController)
 route.get("/student", getStudentController)
 route.post("/student/studentId", getStudentByIdController)
 route.post("/student/pay", studentPayBalanceQueueController)
+route.post("/student/nextSem", proceedToNextSemController  )
 
 
 export default route
