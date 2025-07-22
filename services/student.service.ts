@@ -2,6 +2,7 @@ import Student from "../model/student.model"
 import Sections from "../model/section.model"
 import { studentInterface } from "../types/student.type"
 import mongoose from "mongoose"
+import { sectionSubjects } from "../types/section.type"
 
 export const createStudent = async ( student : studentInterface) => {
     return await Student.create(student)
@@ -71,6 +72,11 @@ export const updateStudentStatus= async (id : string, status : string) => {
     await Student.findByIdAndUpdate(id, {status})
 }
 
+export const setStudentBalance = async (id : string, balance : number) => {
+    await Student.findByIdAndUpdate(id, {balance})
+}
+
+
 export const updateStudentBalance= async (id : string, payment : number) => {
   const student =  await Student.findById(id)
   if(!student) return
@@ -96,3 +102,19 @@ export const clearStudent = async (studentId : string ) => {
     await student.save()
 }
 
+
+export const getStudentTuition = async (id : string ) => {
+
+    const studentData = await Student.findById(id)
+    if (!studentData) return -505;
+
+    const student = await getStudentById(studentData.studentId)
+    if(!student) return -404
+
+    let tuition = 0
+    const unitPrice = 1000
+    student.subjects.forEach((sub : sectionSubjects) => {
+      tuition += (unitPrice * sub.units)
+    })
+    return tuition
+}

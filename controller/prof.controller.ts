@@ -1,5 +1,6 @@
 import { Response, Request } from "express";
 import { getProf, createProf , getProfById, findProf} from "../services/prof.service";
+import { removeStudentToSubject } from "../services/section.service";
 
 export const createProfController = async (request : Request , response : Response) => {
     const prof   = request.body
@@ -24,3 +25,12 @@ export const getProfByIdController = async (request : Request , response : Respo
     const prof = await getProfById(id)
     response.send(prof)
 }
+
+
+
+export const failedStudentController = async (request : Request , response : Response) => {
+    const { student_id, subject_id, prof_id } = request.body
+    await removeStudentToSubject(subject_id, student_id)
+    const prof = await getProfById(prof_id)
+    response.send(prof)
+} 

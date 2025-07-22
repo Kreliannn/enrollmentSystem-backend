@@ -15,4 +15,5 @@ route.get("/student", getStudentController)
 route.post("/student/studentId", getStudentByIdController)
 route.post("/student/pay", studentPayBalanceQueueController)
 
+
 export default route

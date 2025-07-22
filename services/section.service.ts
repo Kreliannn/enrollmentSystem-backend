@@ -61,4 +61,20 @@ export const addStudentToSubject = async (id : string) => {
 }
 
 
+export const removeStudentToSubject = async (subject_id : string, student_id : string) => {
+    await Section.updateOne(
+        { "subjects._id": subject_id },
+        {
+            $pull: {
+            "subjects.$[subject].students": student_id
+            }
+        },
+        {
+            arrayFilters: [{ "subject._id": subject_id }]
+        }
+    );
+}
+
+
+
 

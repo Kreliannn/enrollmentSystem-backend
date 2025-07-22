@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import {  updateStudentBalance ,getStudents ,createStudent, getStudentById, generateStudentId , addSubjectToStudent, updateStudentSection, findStudent, clearStudent, updateStudentStatus} from "../services/student.service";
+import { setStudentBalance ,getStudentTuition, updateStudentBalance ,getStudents ,createStudent, getStudentById, generateStudentId , addSubjectToStudent, updateStudentSection, findStudent, clearStudent, updateStudentStatus} from "../services/student.service";
 import { studentInterface } from "../types/student.type";
 import { getSectionById, addStudentToSection, getSpecificSubject , addStudentToSubject} from "../services/section.service";
 import { getSectionInterface } from "../types/section.type";
@@ -24,7 +24,7 @@ export const createStudentController = async (request : Request , response : Res
 
     const newAccount : studentInterface = {
         ...body,
-        balance : await getTuition(body.course, body.level, body.sem),
+        balance : 0,
         status : "unEnrolled",
         studentId : await generateStudentId(),
         subjects : [],  
@@ -120,6 +120,7 @@ export const clearStudentByIdController = async (request : Request , response : 
 
 
 export const studentForPaymentController = async (request : Request , response : Response) => {
+   
     const { id } = request.body
 
     const queueNumber = await generateQueueNumber() 
@@ -133,12 +134,12 @@ export const studentForPaymentController = async (request : Request , response :
 
     const queue = await CreateQueue(newQueue)
 
+    await setStudentBalance(id, await getStudentTuition(id))
+
     await addStudentToSubject(id)
 
     await updateStudentStatus(id, "enrolled")
     
-    
-
     response.send(queue)
 }
 
