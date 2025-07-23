@@ -9,3 +9,10 @@ export const updateGradeLevel = (level : string) => {
         default :  return "404 year" ; break
     }
 }   
+
+
+
+export function haveSameItems(arr1 : string[], arr2 : string[]) {
+  if (arr1.length !== arr2.length) return false;
+  return arr1.every(item => arr2.includes(item));
+}

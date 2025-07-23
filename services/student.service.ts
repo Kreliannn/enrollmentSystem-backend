@@ -4,6 +4,8 @@ import { studentInterface } from "../types/student.type"
 import mongoose from "mongoose"
 import { sectionSubjects } from "../types/section.type"
 import { updateGradeLevel } from "../utils/function"
+import { stderr } from "process"
+import { checkIfStudentGraduate } from "./course.service"
 
 export const createStudent = async ( student : studentInterface) => {
     return await Student.create(student)
@@ -134,16 +136,24 @@ export const clearStudentSub = async ( ) => {
 export const updateStudentLevel = async () => {
   const allStudents = await Student.find();
   if (!allStudents) return;
-
+  
   for (const student of allStudents) {
-    if (student.sem === "1st sem") {
-      student.sem = "2nd sem";
-    } else {
-      student.sem = "1st sem";
-       student.level = updateGradeLevel(student.level);
+    if(student.status == "enrolled" && student.balance == 0 &&  !(await checkIfStudentGraduate(student.course, student.passed))) 
+    {
+        if (student.sem === "1st sem") {
+          student.sem = "2nd sem";
+        } else {
+          student.sem = "1st sem";
+          student.level = updateGradeLevel(student.level);
+        }
     }
     student.section = "none";
-    student.status = "unEnrolled";
+    if(await checkIfStudentGraduate(student.course, student.passed)){
+      student.status = "graduate";
+    } else {
+      student.status = "unEnrolled";
+    }
+    
     await student.save();
   }
 };

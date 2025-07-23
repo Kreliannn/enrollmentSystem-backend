@@ -5,7 +5,6 @@ import { getSectionById, addStudentToSection, getSpecificSubject , addStudentToS
 import { getSectionInterface } from "../types/section.type";
 import { generateQueueNumber, CreateQueue, getQueue } from "../services/queue.service";
 import { queueInterface } from "../types/queue.type";
-import { getTuition } from "../services/course.service";
 import { createTransaction } from "../services/transaction.service";
 
 export const createStudentController = async (request : Request , response : Response) => {

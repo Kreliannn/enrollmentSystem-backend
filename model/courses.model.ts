@@ -7,7 +7,6 @@ const coursesSchema = new Schema({
     year : [{
         level : { type: String, required: true },
         sem : { type: String, required: true },
-        tuition : { type: Number, required: true },
         subjects : [{
             name : { type: String, required: true },
             course : { type: String, required: true },

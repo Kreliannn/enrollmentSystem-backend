@@ -5,6 +5,7 @@ import { sectionInterface, getSectionInterface } from "../types/section.type"
 import mongoose from "mongoose"
 import { addPassedSub } from "./student.service"
 
+
 export const createSection = async ( section : sectionInterface) => {
     return await Section.create(section)
 }
@@ -83,7 +84,11 @@ export const passAllEnrolled = async () => {
     for (const sub of section.subjects) {
       const subCode = sub.code;
       for (const student_id of sub.students) {
-        await addPassedSub(student_id.toString(), subCode);
+        const student = await Student.findById(student_id.toString())
+        if(!student) return
+        if(student.status == "enrolled" && student.balance == 0){
+             await addPassedSub(student_id.toString(), subCode);
+        }
       }
     }
   }
