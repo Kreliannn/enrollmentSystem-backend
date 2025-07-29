@@ -14,6 +14,13 @@ export const getSection = async () => {
     return await Section.find().populate("subjects.instructor")
 }
 
+export const checkIfSectionExist = async (course: string , level: string, sem: string, section: string) => {
+    const item = await Section.findOne({course , level, sem, section})
+    if(!item) return false
+    return true
+}
+
+
 export const getSectionByCourse = async (course : string) => {
     return await Section.findOne({course}).populate("subjects.instructor")
 }
@@ -108,5 +115,8 @@ export const clearSectionStudent= async ( ) => {
     }
 }
 
+export const removeSectionByID = async ( id : string) => {
+   return await Section.findByIdAndDelete(id);
+}
 
 

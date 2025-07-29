@@ -11,7 +11,11 @@ export const getCourses = async () => {
 }
 
 
-
+export const checkIfCourseExisted = async (code : string) => {
+    const course = await Courses.findOne({ code })
+    if(!course) return false
+    return true
+}
 
 
 export const checkIfStudentGraduate = async (course : string, passed : string[]) => {

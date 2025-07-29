@@ -18,6 +18,11 @@ export const findProf= async (email : string , password : string) => {
     return await getProfById(prof._id.toString())
 }
 
+export const checkEmailIfExisted = async (email : string ) => {
+    const prof = await Prof.findOne({email})
+    if(!prof) return false
+    return true
+}
 
 
 export const getProfById = async (id: string) => {
@@ -62,3 +67,7 @@ export const addSubjectToSched = async (id : string, sectionId : string) => {
     await Prof.findByIdAndUpdate(id, {$push: { schedules: sectionId }})
 }
 
+
+export const removeSujectToSched = async (id : string, sectionId : string) => {
+    await Prof.findByIdAndUpdate(id, {$pull: { schedules: sectionId }})
+}

@@ -1,10 +1,8 @@
 import { Response, Request } from "express";
-import { createCourse, getCourses } from "../services/course.service";
+import { createCourse, getCourses, checkIfCourseExisted } from "../services/course.service";
 
 export const createCoursesController = async (request : Request , response : Response) => {
-    console.log("test")
     const course   = request.body
-    console.log(course)
     await createCourse(course)
     response.send("success")
 }
