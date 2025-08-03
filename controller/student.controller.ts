@@ -6,6 +6,16 @@ import { getSectionInterface } from "../types/section.type";
 import { generateQueueNumber, CreateQueue, getQueue } from "../services/queue.service";
 import { queueInterface } from "../types/queue.type";
 import { createTransaction } from "../services/transaction.service";
+import { haveSameItems } from "../utils/function";
+
+const requirementList = [
+   "Form 138",
+   "Good Moral",
+   "2x2 Picture",
+   "PSA",
+   "SHS Diploma",
+];
+
 
 export const createStudentController = async (request : Request , response : Response) => {
 
@@ -16,24 +26,26 @@ export const createStudentController = async (request : Request , response : Res
         password : string,
         course : string,
         gender : string,
-        passed : string[]
+        passed : string[],
+        requirements : string[]
     }
+
 
     const body : dataType  = request.body
 
     const newAccount : studentInterface = {
         ...body,
         balance : 0,
-        status : "unEnrolled",
+        status : (haveSameItems(requirementList, body.requirements)) ? "unEnrolled" : "unComplete",
         studentId : await generateStudentId(),
         subjects : [],  
         section : "none",
         failed : []
     }
 
-    await createStudent(newAccount)
+    const student = await createStudent(newAccount)
    
-    response.send("success")
+    response.send(student)
 }
 
 export const getStudentController = async (request : Request , response : Response) => {
