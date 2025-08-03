@@ -88,6 +88,11 @@ export const updateStudentBalance= async (id : string, payment : number) => {
   return student
 }
 
+export const updateStudentRequirements= async (id : string, requirements : string[]) => {
+  return await Student.findByIdAndUpdate(id, { requirements })
+}
+
+
 
 
 export const findStudent = async (studentId : string , password : string) => {

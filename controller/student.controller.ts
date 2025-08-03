@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { updateStudentLevel,  clearStudentSub,setStudentBalance ,getStudentTuition, updateStudentBalance ,getStudents ,createStudent, getStudentById, generateStudentId , addSubjectToStudent, updateStudentSection, findStudent, clearStudent, updateStudentStatus} from "../services/student.service";
+import { updateStudentRequirements,updateStudentLevel,  clearStudentSub,setStudentBalance ,getStudentTuition, updateStudentBalance ,getStudents ,createStudent, getStudentById, generateStudentId , addSubjectToStudent, updateStudentSection, findStudent, clearStudent, updateStudentStatus} from "../services/student.service";
 import { studentInterface } from "../types/student.type";
 import { getSectionById, addStudentToSection, getSpecificSubject , addStudentToSubject, passAllEnrolled, clearSectionStudent} from "../services/section.service";
 import { getSectionInterface } from "../types/section.type";
@@ -185,7 +185,22 @@ export const studentPayBalanceQueueController = async (request : Request , respo
     response.send(student)
 }
 
+export const studentUpdateRequirementsController = async (request : Request , response : Response) => {
 
+    const { id, requirements } = request.body
+
+    if(haveSameItems(requirementList, requirements)){
+        await updateStudentStatus(id, "unEnrolled")
+    } else {
+        await updateStudentStatus(id, "unComplete")
+    }
+
+    const student = await updateStudentRequirements(id, requirements)
+
+    console.log(student)
+   
+    response.send(student)
+}
 
 export const proceedToNextSemController = async (request : Request , response : Response) => {
     await passAllEnrolled() //check balance
