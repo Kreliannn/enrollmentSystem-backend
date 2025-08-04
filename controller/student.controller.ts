@@ -172,14 +172,15 @@ export const studentCreateQueueController = async (request : Request , response 
 
 
 export const studentPayBalanceQueueController = async (request : Request , response : Response) => {
-    const { id, payment } = request.body
+    const { id, payment, mode } = request.body
     const student = await updateStudentBalance(id, payment)
     const date = new Date();
     const today = date.toISOString().split('T')[0];
     const newTransaction = {
         student : id,
         amount : payment,
-        date : today
+        date : today,
+        mode : mode
     }
     await createTransaction(newTransaction)
     response.send(student)
